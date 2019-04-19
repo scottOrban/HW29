@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-'''user code'''
-import RPi.GPIO as GPIO
+'''usr code'''
+import RPI.GPIO as GPIO
 from gpiozero import LED
 
 GPIO.setmode(GPIO.BCM)
@@ -8,6 +8,8 @@ led=LED(23)
 
 led_pin=24
 GPIO.setup(led_pin,GPIO.OUT)
+pwm=GPIO.setup(led_pin,100)
+pwm.start(100)
 
 def ledToggle():
     if led.is_lit:
@@ -15,7 +17,7 @@ def ledToggle():
     else:
         led.on()    
     
-'''user code'''
+'''usr code'''
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -24,6 +26,19 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        
+        self.verticalSlider = QtWidgets.QSlider(self.centralwidget)
+        
+        '''usr code'''
+        self.verticalSlider.setMinimum(0)
+        self.verticalSlider.setMaximum(100)
+        self.verticalSlider.setValue(100)
+        '''usr code'''
+
+        self.verticalSlider.setGeometry(QtCore.QRect(350, 90, 22, 160))
+        self.verticalSlider.setOrientation(QtCore.Qt.Vertical)
+        self.verticalSlider.setObjectName("verticalSlider")
+
         self.pushButton.setGeometry(QtCore.QRect(150, 120, 211, 101))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -41,9 +56,17 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Message Box"))
         self.pushButton.setText(_translate("MainWindow", "Click me"))
-        '''user code'''
+        '''usr code'''
         self.pushButton.clicked.connect(ledToggle)
+        self.verticalSlider.valueChanged.connect(self.sliderMov)
+
+    def sliderMov(self):
+        value=self.verticalSlider.value()
+        print(value)
+        pwm.ChangedDutyCyle(value)
+        '''user code'''
         
+'''usr code'''
 import sys
 app = QtWidgets.QApplication(sys.argv)
 MainWindow=QtWidgets.QMainWindow()
@@ -51,4 +74,4 @@ ui=Ui_MainWindow()
 ui.setupUi(MainWindow)
 MainWindow.show()
 sys.exit(app.exec_())
-'''user code'''
+'''usr code'''
