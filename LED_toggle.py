@@ -1,14 +1,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 '''usr code'''
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 from gpiozero import LED
 
 GPIO.setmode(GPIO.BCM)
 led=LED(23)
 
-led_pin=24
+led_pin=23
 GPIO.setup(led_pin,GPIO.OUT)
-pwm=GPIO.setup(led_pin,100)
+pwm=GPIO.PWM(led_pin,100)
 pwm.start(100)
 
 def ledToggle():
@@ -63,8 +63,8 @@ class Ui_MainWindow(object):
     def sliderMov(self):
         value=self.verticalSlider.value()
         print(value)
-        pwm.ChangedDutyCyle(value)
-        '''user code'''
+        pwm.ChangeDutyCycle(value)
+        '''usr code'''
         
 '''usr code'''
 import sys
